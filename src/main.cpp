@@ -3,13 +3,16 @@
 #include "path.hpp"
 
 int main(int argc, char** argv) {
-    boost::program_options::options_description desc("Allowed arguments and options");
+    namespace fs = std::filesystem;
+    namespace bpo = boost::program_options;
+
+    bpo::options_description desc("Allowed arguments and options");
     desc.add_options()
         ("help", "Show help message");
 
-    boost::program_options::variables_map vm;
-    boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-    boost::program_options::notify(vm);
+    bpo::variables_map vm;
+    store(parse_command_line(argc, argv, desc), vm);
+    notify(vm);
 
     if (vm.count("help")) {
         std::cout << desc << std::endl;
@@ -19,12 +22,12 @@ int main(int argc, char** argv) {
 
     auto dataDir(
         git_watch::path::config_directory()
-            .value_or(std::filesystem::current_path().append("config"))
+            .value_or(fs::current_path().append("config"))
             .append("git_watch")
     );
 
-    if (!std::filesystem::exists(dataDir)) {
-        std::filesystem::create_directories(dataDir);
+    if (!exists(dataDir)) {
+        create_directories(dataDir);
     }
 
     std::cout << dataDir.generic_string() << std::endl;
