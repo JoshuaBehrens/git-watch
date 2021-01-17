@@ -2,11 +2,17 @@
 #include "path.hpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    auto dataDir(
+        git_watch::path::data_directory()
+            .value_or(std::filesystem::current_path().append("data"))
+            .append("git_watch")
+    );
 
-    std::cout << git_watch::path::user_directory().value_or(std::filesystem::current_path()).generic_string() << std::endl;
-    std::cout << git_watch::path::data_directory().value_or(std::filesystem::current_path()).generic_string() << std::endl;
-    std::cout << git_watch::path::config_directory().value_or(std::filesystem::current_path()).generic_string() << std::endl;
+    if (!std::filesystem::exists(dataDir)) {
+        std::filesystem::create_directories(dataDir);
+    }
+
+    std::cout << dataDir.generic_string() << std::endl;
 
     return 0;
 }
