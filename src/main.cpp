@@ -18,8 +18,8 @@ int main(int argc, char** argv) {
     }
 
     auto dataDir(
-        git_watch::path::data_directory()
-            .value_or(std::filesystem::current_path().append("data"))
+        git_watch::path::config_directory()
+            .value_or(std::filesystem::current_path().append("config"))
             .append("git_watch")
     );
 
