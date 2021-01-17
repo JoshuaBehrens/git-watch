@@ -11,6 +11,10 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(git_watch src/main.cpp)
-target_include_directories(git_watch INTERFACE include ${CONAN_INCLUDE_DIRS})
-target_link_libraries(git_watch INTERFACE ${CONAN_LIBS})
+add_executable(
+        git_watch
+        src/main.cpp
+        src/path.cpp
+)
+target_include_directories(git_watch PRIVATE include ${CONAN_INCLUDE_DIRS})
+target_link_libraries(git_watch PRIVATE ${CONAN_LIBS})
