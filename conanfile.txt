@@ -3,3 +3,7 @@ cmake
 
 [requires]
 boost/1.71.0
+
+[options]
+boost:without_fiber=True
+boost:numa=False
