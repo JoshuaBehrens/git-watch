@@ -15,6 +15,7 @@ add_executable(
         git_watch
         src/main.cpp
         src/path.cpp
+        src/arguments.cpp
 )
 target_include_directories(git_watch PRIVATE include ${CONAN_INCLUDE_DIRS})
 target_link_libraries(git_watch PRIVATE ${CONAN_LIBS})
