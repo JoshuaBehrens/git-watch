@@ -12,22 +12,28 @@ int main(int argc, char** argv) {
             .append("git_watch")
             .generic_string()
     );
+    std::string operation;
 
-    bpo::options_description desc("Allowed arguments and options");
+    bpo::options_description desc("Allowed options");
     desc.add_options()
-        ("help", "Show help message")
-        ("config-dir", bpo::value<std::string>(&configDir)->default_value(configDir), "Set the configuration directory");
-
+        ("help,h", "Show help message")
+        ("config-dir,c", bpo::value<std::string>(&configDir)->default_value(configDir), "Set the configuration directory")
+        ("operation,o", bpo::value<std::string>(&operation), "Operation of choice");
+    bpo::positional_options_description pdesc;
+    pdesc.add("operation", 1);
     auto configDirPath = fs::path(configDir);
 
     bpo::variables_map vm;
-    store(parse_command_line(argc, argv, desc), vm);
+    auto parser{bpo::command_line_parser(argc, argv)};
+
+    store(parser.options(desc).run(), vm);
+    store(parser.positional(pdesc).run(), vm);
     notify(vm);
 
-    if (vm.count("help")) {
-        std::cout << desc << std::endl;
+    if (vm.count("help") || operation.empty()) {
+        std::cout << "Usage " << argv[0] << " " << "operation [options]" << std::endl << desc << std::endl;
 
-        return 0;
+        return vm.count("help") ? 0 : 1;
     }
 
     if (!exists(configDirPath)) {
